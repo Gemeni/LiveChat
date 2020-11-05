@@ -123,7 +123,7 @@ function Login(props) {
                 placeholder="password"
               />
             
-              <Button
+              <Button 
                 type="submit"
                 fullWidth
                 variant="contained"
@@ -134,7 +134,7 @@ function Login(props) {
                 Sign In
             </Button>
               <Grid item>
-                <Link to='/signup' variant="body2">{"Don't have an account? Sign Up"}</Link>
+                <Link to='/signup' className="linkClass" variant="body2">{"Don't have an account? Sign Up"}</Link>
               </Grid>
               <Box mt={5}>
                 <Copyright />

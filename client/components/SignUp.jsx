@@ -99,7 +99,8 @@ function SignUp(props)  {
               Sign Up
           </Typography>
             <form  onSubmit={handleClick} ref={(element) => form = element} className={classes.form} noValidate>
-              <TextField
+              <TextField 
+                className="user"
                 variant="outlined"
                 margin="normal"
                 required
@@ -111,7 +112,8 @@ function SignUp(props)  {
                 autoFocus
                 type="text"
               />
-              <TextField
+              <TextField 
+                className="password"
                 variant="outlined"
                 margin="normal"
                 required
