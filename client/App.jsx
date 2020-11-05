@@ -3,6 +3,7 @@ import { Route, useHistory } from 'react-router-dom';
 import Login from './components/Login.jsx';
 import SignUp from './components/SignUp.jsx';
 import Chatroom from './components/Chatroom.jsx';
+import GuardedRoute from './components/GuardedRoute.jsx';
 
 class App extends React.Component {
   
@@ -15,17 +16,22 @@ class App extends React.Component {
   }
 
   setUserName(name) {
-    this.setState({
-      username:name
-    })
+    console.log("name:", name);
+    if (!name) {
+      this.setState({
+        username:null
+      })
+    } else {
+      this.setState({
+        username:name
+      })
+    }  
   }
 
   render() {
     return (
       <div >
-        <Route exact path='/'>
-          <Chatroom username={this.state.username}/>
-        </Route>
+        <GuardedRoute path='/' component={Chatroom} username={this.state.username} setUserName={this.setUserName}/>
         <Route exact path='/login' >
           <Login onLogin={this.setUserName}/>
         </Route>

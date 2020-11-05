@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import Message from './Message.jsx';
 const url = 'ws://localhost:4040';
 
@@ -11,6 +12,7 @@ class Chatroom extends React.Component {
         };
         this.handleChange = this.handleChange.bind(this);
         this.sendMessage = this.sendMessage.bind(this);
+        this.handleLogout = this.handleLogout.bind(this);
     }
 
     // connect to a new Websocket
@@ -46,7 +48,9 @@ class Chatroom extends React.Component {
             });
         }
     }
-
+    handleLogout() {
+        return this.props.onClick();
+    }
     // on change of input box, save message to state
     handleChange(event) {
         this.setState(prevState => {
@@ -65,10 +69,11 @@ class Chatroom extends React.Component {
         this.connection.send(JSON.stringify(message));
     }
 
-    render() {
+    render(props) {
         const messages = this.state.messages.map((msg, index) => (<Message key={index} text={msg.text} username={msg.username} self={this.props.username === msg.username} />));
         return (
-            <div className='chats'>
+            <>
+             <div className='chats'>
                 <div className='chat-list'>
                     {messages}
                 </div>
@@ -87,6 +92,8 @@ class Chatroom extends React.Component {
                     </button>
                 </form>
             </div>
+                <Link to='/login' onClick={this.handleLogout} className="logout">LOGOUT</Link> 
+            </>
         )
     }
 }
