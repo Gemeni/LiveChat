@@ -19,10 +19,12 @@ const createServer = (portNum) => {
   const SERVER = new WebSocket.Server({ port: portNum });
   // Upon creating a connection wait to receive a message from a client
   SERVER.on('connection', (websocket) => {
+    // console.log('user connected')
     websocket.on('message', (message) => {
       // Upon receiving a message, broadcast the message to all clients
-      console.log(message);
-      broadcast(portNum, message);
+      // console.log(message);
+      // broadcast(portNum, message);
+      websocket.send(message)
     });
   });
   WS_SERVERS[portNum] = SERVER;

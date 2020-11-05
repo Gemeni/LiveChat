@@ -39,4 +39,17 @@ sessionController.createSession = (req, res, next) => {
     });
 };
 
+sessionController.deleteSession = (req, res, next) => {
+  const { username } = req.body
+  console.log('username', username)
+  // let query = 'DELETE FROM sessions JOIN users ON sessions.id = users.id WHERE user_name = $1' 
+  // let query = 'DELETE FROM sessions USING users WHERE users.id = sessions.user_id and [user_name = $1]'
+  db.query(query, username)
+  .then((data) =>
+  {
+   console.log(data)
+   return next()
+  }
+  )
+}
 module.exports = sessionController;
