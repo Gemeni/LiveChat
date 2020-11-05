@@ -7,6 +7,7 @@ const saltRounds = 10;
 // Use bcrypt to generate an ecrypted version of the user password
 userController.hashPassword = (req, res, next) => {
   const { password } = req.body;
+  console.log("password is: ", password)
   // Attempt to generate the encrypted password
   bcrypt.hash(password, saltRounds, (err, hash) => {
     if (err) {
@@ -15,6 +16,7 @@ userController.hashPassword = (req, res, next) => {
       return next(errorMsg);
     }
     // If successful, pass the encrypted password on to the next middleware function
+    console.log(hash)
     res.locals.hash = hash;
     return next();
   });
@@ -24,6 +26,7 @@ userController.hashPassword = (req, res, next) => {
 userController.createUser = (req, res, next) => {
   const { hash } = res.locals;
   const { username } = req.body;
+  console.log(username, hash)
   // Attempt to create the new user in the database
   db.query('INSERT INTO users(user_name, hashed_pass) VALUES ($1, $2) RETURNING id;', [username, hash])
     .then((data) => {
@@ -42,16 +45,16 @@ userController.createUser = (req, res, next) => {
 // Obtain username and password from the request body, locate the appropriate user in the database
 // and then authenticate the submitted password against the password stored in the database.
 userController.verifyUser = (req, res, next) => {
+  console.log(req.body)
   const USERNAME = req.body.username;
   const PASSWORD = req.body.password;
   console.log(USERNAME, PASSWORD)
   // Find the stored encrypted password for the user
   db.query('SELECT hashed_pass FROM users WHERE user_name = $1', [USERNAME])
     .then((data) => {
-      // const HASHED_PASSWORD = data.rows[0];
-      const { hashed_pass } = data.rows[0]
+      const {hashed_pass} = data.rows[0];
       console.log(hashed_pass)
-      // console.log('hashed', HASHED_PASSWORD)
+      // console.log("data : ",data)
       // Compare the stored password with the provided password
       bcrypt.compare(PASSWORD, hashed_pass).then((result) => {
         if (!result) {

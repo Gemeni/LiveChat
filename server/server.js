@@ -2,6 +2,7 @@ const express = require('express');
 const path = require('path');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
+const cors = require('cors')
 
 // Controller imports
 const userController = require('./controllers/userController');
@@ -13,6 +14,7 @@ const app = express();
 app.use(cookieParser());
 
 app.use(express.json());
+app.use(cors())
 
 // Automatically parse urlencoded body content from incoming requests and place it in req.body
 app.use(bodyParser.urlencoded({ extended: true }));

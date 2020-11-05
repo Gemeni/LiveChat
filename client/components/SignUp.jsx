@@ -1,95 +1,161 @@
+import axios from 'axios';
 import React from 'react';
-import { useHistory } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
+import Avatar from '@material-ui/core/Avatar';
+import Button from '@material-ui/core/Button';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import TextField from '@material-ui/core/TextField';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Checkbox from '@material-ui/core/Checkbox';
+// import Link from '@material-ui/core/Link';
+import Paper from '@material-ui/core/Paper';
+import Box from '@material-ui/core/Box';
+import Grid from '@material-ui/core/Grid';
+import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
+import Typography from '@material-ui/core/Typography';
+import { makeStyles } from '@material-ui/core/styles';
 
-class SignUp extends React.Component {
-    constructor() {
-        super();
-        this.state = {
-            username: '',
-            password: '',
-            confirmPassword: '',
-            errorMessage: '',
-        };
-        this.handleChange = this.handleChange.bind(this);
-        this.handleClick = this.handleClick.bind(this);
-    }
+function Copyright() {
+  return (
+    <Typography variant="body2" color="textSecondary" align="center">
+      {'Copyright © '}
+      <Link color="inherit" href="https://github.com/Gemeni/LiveChat">
+        Gemeni
+      </Link>{' '}
+      {new Date().getFullYear()}
+      {'.'}
+    </Typography>
+  );
+}
 
-    handleChange(event, key) {
-        // on input box change, save username and password into state
-        this.setState((prevState) => ({
-            ...prevState,
-            [key]: event.target.value,
-        }));
-    }
+const useStyles = makeStyles((theme) => ({
+  root: {
+    height: '100vh',
+  },
+  image: {
+    backgroundImage: 'url(https://source.unsplash.com/random)',
+    backgroundRepeat: 'no-repeat',
+    backgroundColor:
+      theme.palette.type === 'light' ? theme.palette.grey[50] : theme.palette.grey[900],
+    backgroundSize: 'cover',
+    backgroundPosition: 'center',
+  },
+  paper: {
+    margin: theme.spacing(8, 4),
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+  },
+  avatar: {
+    margin: theme.spacing(1),
+    backgroundColor: theme.palette.secondary.main,
+  },
+  form: {
+    width: '100%', // Fix IE 11 issue.
+    marginTop: theme.spacing(1),
+  },
+  submit: {
+    margin: theme.spacing(3, 0, 2),
+  },
+}));
 
-    handleClick() {
-        const { push } = useHistory();
-        const { password, username } =  this.state;
-        // check if password is the same as confirmPassword
-        if (this.state.password !== this.state.confirmPassword) {
+function SignUp(props)  {
+    const classes = useStyles();
+    const history = useHistory();
+    let form = React.createRef();
+
+    function handleClick(event) {
+        event.preventDefault();
+  
+        const { username, password, confirmedPassword } = form;
+        
+        if (password.value !== confirmedPassword.value) {
             const errorMessage = 'Please enter the same password in the "Confirm Password" field';
-        // if not, display error message
-            this.setState((prevState) => ({
-                ...prevState,
-                errorMessage,
-            }));
-        } else {
-            this.setState((prevState) => ({
-                ...prevState,
-                errorMessage: '',
-            }));
         }  
-       // send username and password to server and wait for response from server
-        fetch('/api/signup', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'multipart/form-data',
-            },
-            body: {
-                username,
-                password,
-            },
+    
+        axios.post('http://localhost:3000/api/signup',{
+            username:username.value,
+            password:password.value
         })
-        //if all ok from server response, redirect to main page of app
         .then(data => {
-            const { isLoggedIn } = data;
-            // if isLogged in is true, redirect to main page
-            if (isLoggedIn) return push('/main');
-            // else, redirect to login
-            return push('/login');
+            if (data.status === 200) {
+                props.onLogin(username.value);
+                history.push('/')
+            } 
         })
         .catch(err => console.log(err));
 
     }
-    render() {
-        return (
-            <>
-            <h3>Sign Up</h3>
-            <form style={{display: 'flex', flexDirection: 'column'}}>
-                <input 
-                    type="text"
-                    placeholder="username"
-                    onChange={(event) => this.handleChange(event, 'username')}
-                    required
-                    />
-                <input 
-                    type="password"
-                    placeholder="password"
-                    onChange={(event) => this.handleChange(event, 'password')}
-                    required
-                    />
-                <input 
-                    type="password"
-                    placeholder="confirm password"
-                    onChange={(event) => this.handleChange(event, 'confirmPassword')}
-                    required
-                    />
-                <button type="button" onSubmit={this.handleClick} onClick={this.handleClick}>Sign Up</button>
-                <h2>{this.state.errorMessage}</h2>
+    return (
+       <Grid container component="main" className={classes.root}>
+        <CssBaseline />
+        <Grid item xs={false} sm={4} md={7} className={classes.image} />
+        <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
+        <div className={classes.paper}>
+            <Avatar className={classes.avatar}>
+              <LockOutlinedIcon />
+            </Avatar>
+            <Typography component="h1" variant="h5">
+              Sign Up
+          </Typography>
+            <form  onSubmit={handleClick} ref={(element) => form = element} className={classes.form} noValidate>
+              <TextField
+                variant="outlined"
+                margin="normal"
+                required
+                fullWidth
+                id="email"
+                label="Username"
+                name="username"
+                autoComplete="name"
+                autoFocus
+                type="text"
+              />
+              <TextField
+                variant="outlined"
+                margin="normal"
+                required
+                fullWidth
+                name="password"
+                label="Password"
+                type="password"
+                id="password"
+                autoComplete="current-password"
+                placeholder="password"
+              />
+			 <TextField
+                variant="outlined"
+                margin="normal"
+                required
+                fullWidth
+                name="confirmedPassword"
+                label="Confirm password"
+                type="password"
+                id="password"
+                autoComplete="current-password"
+                placeholder="confirmed password"
+              />
+            
+              <Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                color="primary"
+                className={classes.submit}
+              >
+                Sign Up
+            </Button>
+              <Grid item>
+                <Link to='/login' variant="body2">{"Already have an account? Sign in"}</Link>
+              </Grid>
+              <Box mt={5}>
+                <Copyright />
+              </Box>
             </form>
-        </>
-        )
-    }
-}
+          </div>
+        </Grid>
+      </Grid>
+    )
+    };
 
 export default SignUp;

@@ -12,8 +12,9 @@ module.exports = {
     // publicPath: '/',
     // port: 8080,
     proxy: {
-      '/api': 'http://localhost:3000',
+      '/api/': 'http://localhost:3000',
     },
+    historyApiFallback: true
   },
   module: {
     rules: [
@@ -44,4 +45,5 @@ module.exports = {
       template: './client/index.html',
     }),
   ],
+  resolve: {extensions: ['.js', '.jsx', '.css', '.scss', '.json']},
 };

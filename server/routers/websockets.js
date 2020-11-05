@@ -4,11 +4,13 @@ const WebSocket = require('ws');
 const WS_SERVERS = {};
 
 // Broadcast any data received from one client back to all clients
-const broadcast = (portNum, data) => {
+const broadcast = (portNum,clientId,data) => {
+  // console.log(WS_SERVERS[portNum].clients)
   WS_SERVERS[portNum].clients.forEach((client) => {
     // Only send the data to a client if they have an open connection
+    // console.log(client , WebSocket)
     if (client.readyState === WebSocket.OPEN) {
-      client.send(data);
+      client.send(`${data}`);
     }
   });
 };
@@ -19,15 +21,15 @@ const createServer = (portNum) => {
   const SERVER = new WebSocket.Server({ port: portNum });
   // Upon creating a connection wait to receive a message from a client
   SERVER.on('connection', (websocket) => {
-    // console.log('user connected')
+    // websocket.id = 'Billy '
     websocket.on('message', (message) => {
       // Upon receiving a message, broadcast the message to all clients
-      // console.log(message);
-      // broadcast(portNum, message);
-      websocket.send(message)
+      console.log("hello my message is: ",message);
+      broadcast(portNum,websocket.id, message);
     });
   });
   WS_SERVERS[portNum] = SERVER;
 };
 
 module.exports = { createServer };
+

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 
 const url = 'ws://localhost:4040';
 
-class Main extends React.Component {
+class Chatroom extends React.Component {
     constructor() {
         super();
         this.state = {
@@ -82,8 +82,7 @@ class Main extends React.Component {
                         onClick={(e) => {
                             e.preventDefault();
                             this.connection.send(this.state.message);
-                            const textbox = document.querySelector('.message');
-                            textbox.value = '';
+                            //
                         }}
                         >
                         Send
@@ -94,4 +93,4 @@ class Main extends React.Component {
     }
 }
 
-export default Main;
+export default Chatroom;
