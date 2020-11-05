@@ -1,1 +1,0 @@
-module.exports //things to configure
