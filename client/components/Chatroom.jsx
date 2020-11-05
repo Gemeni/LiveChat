@@ -68,15 +68,14 @@ class Chatroom extends React.Component {
     render() {
         const messages = this.state.messages.map((msg, index) => (<Message key={index} text={msg.text} username={msg.username} self={this.props.username === msg.username} />));
         return (
-            <div>
-                <div className='chatroom'>
+            <div className='chats'>
+                <div className='chat-list'>
                     {messages}
                 </div>
-                <hr />
-                <form>
-                    <input 
+                <form className='new-message'>
+                    <input
                         type='text'
-                        className='message'
+                        className='new-message-input'
                         placeholder='message'
                         onChange={this.handleChange}
                         />

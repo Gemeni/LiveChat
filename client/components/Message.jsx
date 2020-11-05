@@ -1,9 +1,13 @@
 import React from 'react';
+import '../styles/index.css';
 
+const bubbleDirection = () => {
+
+}
 const Message = ({ text, username, self }) => (
-    <div className={'message' + (self ? ' message-self' : '')}>
+    <div className={`bubble-container ${self ? '' :'bubble-direction-reverse'}`}>
         <p className='message-username'>{username}</p>
-        <p className='message-text'>{text}</p>
+        <p className={`bubble ${self ? 'you' : 'me' }`}>{text}</p>
     </div>
 )
 
