@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-
+import Message from './Message.jsx';
 const url = 'ws://localhost:4040';
 
 class Chatroom extends React.Component {
@@ -10,6 +10,7 @@ class Chatroom extends React.Component {
             messages: [],
         };
         this.handleChange = this.handleChange.bind(this);
+        this.sendMessage = this.sendMessage.bind(this);
     }
 
     // connect to a new Websocket
@@ -35,18 +36,16 @@ class Chatroom extends React.Component {
             console.log('WebSocket has had an error: ', event);
         };
 
-        this.connection.onmessage = (event) => {
-        // when message is received from server
-        // append to dom
+        this.connection.onmessage = (msg) => {
+        msg = JSON.parse(msg.data)
             this.setState((prevState) => {
                 return {
                     ...prevState, 
-                    messages: [...prevState.messages, event.data],
+                    messages: [...prevState.messages, msg],
                 }
             });
         }
     }
-
 
     // on change of input box, save message to state
     handleChange(event) {
@@ -57,34 +56,33 @@ class Chatroom extends React.Component {
             }
         })
     }
+    sendMessage(event) {
+        event.preventDefault();
+        const message = {
+            username: this.props.username,
+            text: this.state.message
+        }
+        this.connection.send(JSON.stringify(message));
+    }
 
     render() {
+        const messages = this.state.messages.map((msg, index) => (<Message key={index} text={msg.text} username={msg.username} self={this.props.username === msg.username} />));
         return (
-            <div>
-                <div className='chatroom'>
-                    { this.state.messages.map(message => (
-                    <>
-                        <p>{message}</p>
-                        <hr />
-                    </>
-                    ))}
+            <div className='chats'>
+                <div className='chat-list'>
+                    {messages}
                 </div>
-                <hr />
-                <form>
-                    <input 
+                <form className='new-message'>
+                    <input
                         type='text'
-                        className='message'
+                        className='new-message-input'
                         placeholder='message'
                         onChange={this.handleChange}
                         />
                     <button
                         type='button'
-                        onClick={(e) => {
-                            e.preventDefault();
-                            this.connection.send(this.state.message);
-                            //
-                        }}
-                        >
+                        onClick={this.sendMessage}
+                    >
                         Send
                     </button>
                 </form>
