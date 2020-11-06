@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import Message from './Message.jsx';
 import axios from 'axios';
+import { EditLocation } from '@material-ui/icons';
 const url = 'ws://localhost:4040';
 
 class Chatroom extends React.Component {
@@ -41,6 +42,7 @@ class Chatroom extends React.Component {
         };
         // parse any incoming messages and add them to the message array in state
         this.connection.onmessage = (msg) => {
+            console.log("MSG:" + msg.data)
         msg = JSON.parse(msg.data)
             this.setState((prevState) => {
                 return {
@@ -50,7 +52,7 @@ class Chatroom extends React.Component {
             });
         }
     }
-    // close the socket when the component unmounts
+    //close the socket when the component unmounts
     componentWillUnmount() {
         this.connection.close();
     }
@@ -78,8 +80,9 @@ class Chatroom extends React.Component {
             username: this.props.username,
             text: this.state.message
         }
-        this.form.reset();
+        
         this.connection.send(JSON.stringify(message));
+        this.form.reset();
     }
 
     render(props) {
@@ -96,7 +99,8 @@ class Chatroom extends React.Component {
                         type='text'
                         className='new-message-input'
                         placeholder='message'
-                        onChange={this.handleChange}
+                            onChange={this.handleChange}
+                            required
                         />
                     <button className='submit' type='submit'>
                         Send
