@@ -44,12 +44,14 @@ app.post('/api/login', userController.verifyUser, sessionController.createSessio
   res.status(200).send({ isLoggedIn, username });
 });
 
+app.delete('/api/logout', sessionController.deleteSession, (req, res) => {
+  res.status(200).send({})
+} )
 // 404 handler for unknown routes
 app.use('*', (req, res) => {
   // Re-route to index.html to avoid resetting the React app
   res.status(404).sendFile(path.resolve(__dirname, '../client/index.html'));
 });
-
 // Global error handler
 app.use((err, req, res, next) => {
   const isLoggedIn = false;
