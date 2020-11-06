@@ -45,5 +45,5 @@ module.exports = {
       template: './client/index.html',
     }),
   ],
-  resolve: {extensions: ['.js', '.jsx', '.css', '.scss', '.json']},
+  // resolve: {extensions: ['.js', '.jsx', '.css', '.scss', '.json']},
 };

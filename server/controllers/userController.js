@@ -48,7 +48,6 @@ userController.verifyUser = (req, res, next) => {
   console.log(req.body)
   const USERNAME = req.body.username;
   const PASSWORD = req.body.password;
-  console.log(USERNAME, PASSWORD)
   // Find the stored encrypted password for the user
   db.query('SELECT hashed_pass FROM users WHERE user_name = $1', [USERNAME])
     .then((data) => {
