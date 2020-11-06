@@ -1,12 +1,10 @@
 import React from 'react';
 import '../styles/index.css';
 
-const bubbleDirection = () => {
-
-}
 const Message = ({ text, username, self }) => (
+    // if msg is from current user display on the left side of the screen and style with a diff color
     <div className={`bubble-container ${self ? '' :'bubble-direction-reverse'}`}>
-        <p className='message-username'>{username}</p>
+        <span className='message-username'>{username}</span>
         <p className={`bubble ${self ? 'you' : 'me' }`}>{text}</p>
     </div>
 )
