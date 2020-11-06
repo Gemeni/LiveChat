@@ -1,4 +1,3 @@
-/* eslint-disable react/button-has-type */
 import React from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { render } from 'react-dom';
