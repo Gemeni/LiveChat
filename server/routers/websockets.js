@@ -25,7 +25,7 @@ const createServer = (portNum) => {
     websocket.on('message', (message) => {
       // Upon receiving a message, broadcast the message to all clients
       console.log("hello my message is: ",message);
-      broadcast(portNum,websocket.id, message);
+      broadcast(portNum, message);
     });
   });
   WS_SERVERS[portNum] = SERVER;
