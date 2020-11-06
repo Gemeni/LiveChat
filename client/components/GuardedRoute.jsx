@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import { Route, Redirect } from "react-router-dom";
 
 const GuardedRoute = ({ component: Component, username, path, setUserName }) => {
-    console.log("auth:" + username, "path:", path);
+    // if the user is logged in redirect to the chatroom and pass on props
+    // otherwise redirect to login page
     return (
         <Route path={path} render={(props) => (
             username !== null

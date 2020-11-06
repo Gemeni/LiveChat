@@ -15,6 +15,7 @@ class App extends React.Component {
     this.setUserName = this.setUserName.bind(this)
   }
 
+//set a username to login and change it to 'null' if user logout
   setUserName(name) {
     console.log("name:", name);
     if (!name) {

@@ -7,7 +7,6 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
-// import Link from '@material-ui/core/Link';
 import Paper from '@material-ui/core/Paper';
 import Box from '@material-ui/core/Box';
 import Grid from '@material-ui/core/Grid';
@@ -64,24 +63,24 @@ const useStyles = makeStyles((theme) => ({
 function Login(props) {
   const classes = useStyles();
   const history = useHistory();
-   let form = React.createRef();
+  // create a reference to the form dom element, so we can grab the input values when the form is submitted
+  let form = React.createRef();
 
   function handleClick(event) {
     event.preventDefault();
-   const { username, password } = form;
-    console.log("username: ", username.value, "password: ", password.value)
+    const { username, password } = form;
     axios.post('http://localhost:3000/api/login',{
         username: username.value,
         password: password.value
       
     })
     .then((data) => {
-      // check for status 200
+      // check for status 200 and set username in state to value that was input into the login form
       if (data.status === 200) {
         props.onLogin(username.value);
+        // redirect to the chat page on sucessful sign in
         history.push('/')
       }
-
     }).catch((err) => console.log(err));
   }
 
